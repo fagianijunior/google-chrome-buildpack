@@ -1,0 +1,24 @@
+api = "0.5"
+
+[buildpack]
+id = "fagiani/google-chrome"
+version = "0.1.11"
+name = "Google Chrome"
+homepage = "https://github.com/fagiani/google-chrome-buildpack"
+description = ""
+keywords = ["chrome", "tar", "tarball", "tgz", "archives", "build", "write", "external", "files", "browser"]
+
+[[buildpack.licenses]]
+type = "MIT"
+
+[[stacks]]
+id = "heroku-18"
+
+[[stacks]]
+id = "heroku-20"
+
+[[stacks]]
+id = "io.buildpacks.stacks.bionic"
+
+[[stacks]]
+id = "*"
