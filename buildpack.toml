@@ -2,7 +2,7 @@ api = "0.5"
 
 [buildpack]
 id = "fagianijunior/google-chrome"
-version = "1.0.0"
+version = "1.0.1"
 name = "Google Chrome"
 homepage = "https://github.com/fagiani/google-chrome-buildpack"
 description = ""

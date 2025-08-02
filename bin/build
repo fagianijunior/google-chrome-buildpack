@@ -10,8 +10,8 @@ set -o pipefail
 
 # parse and derive params
 BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
+CACHE_DIR=$1/STACK
+ENV_DIR="$2/env"
 BUILDPACK_DIR="$(cd "$(dirname "$0")"; cd ..; pwd)"
 
 function error() {
@@ -72,7 +72,7 @@ curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeou
 unzip -q -o "$ZIP_LOCATION" -d "$INSTALL_DIR" | indent
 rm -f "$ZIP_LOCATION"
 
-source "$BUILDPACK_DIR/bin/install-chrome-dependencies"
+#source "$BUILDPACK_DIR/bin/install-chrome-dependencies"
 
 echo "Adding executables to PATH" | indent
 mkdir -p "$BUILD_DIR/.profile.d"
