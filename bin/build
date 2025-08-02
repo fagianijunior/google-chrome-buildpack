@@ -6,7 +6,9 @@ set -e
 set -o pipefail
 
 # debug
-# set -x
+if [ $MAESTRO_DEBUG == "true" ]; then
+  set -x
+fi
 
 # parse and derive params
 BUILD_DIR=$1
