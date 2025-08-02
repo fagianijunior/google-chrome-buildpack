@@ -1,10 +1,10 @@
-api = "0.5"
+api = "0.10"
 
 [buildpack]
 id = "fagianijunior/google-chrome"
-version = "1.0.3"
+version = "1.0.4"
 name = "Google Chrome"
-homepage = "https://github.com/fagiani/google-chrome-buildpack"
+homepage = "https://github.com/fagianijunior/heroku-buildpack-chrome-for-testing"
 description = ""
 keywords = ["chrome", "tar", "tarball", "tgz", "archives", "build", "write", "external", "files", "browser"]
 
