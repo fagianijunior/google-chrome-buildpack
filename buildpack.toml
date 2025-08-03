@@ -2,7 +2,7 @@ api = "0.10"
 
 [buildpack]
 id = "fagianijunior/google-chrome"
-version = "1.0.4"
+version = "1.0.5"
 name = "Google Chrome"
 homepage = "https://github.com/fagianijunior/heroku-buildpack-chrome-for-testing"
 description = ""
