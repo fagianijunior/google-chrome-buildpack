@@ -1,85 +1,53 @@
-# Heroku Buildpack, Chrome for Testing
+# Google Chrome Buildpack
 
-This buildpack installs **Google Chrome browser** `chrome` & [`chromedriver`](https://chromedriver.chromium.org/), the Selenium driver for Chrome, in a Heroku app.
+This buildpack installs Google Chrome in Heroku-compatible environments, making it easy to use browsers in web applications for automated testing or scraping.
 
-## Background
+## Usage
 
-In summer 2023, the Chrome development team [addressed a long-standing problem with keeping Chrome & Chromedriver versions updated and aligned](https://developer.chrome.com/blog/chrome-for-testing/) with each other for automated testing environments. This buildpack follows this strategy to keep `chrome` & `chromedriver` versions  in-sync.
+**Important:** This buildpack must be used in conjunction with [apt-buildpack](https://github.com/fagiani/apt-buildpack/), as Chrome dependencies must be installed first.
 
-## Installation
+### 1. Add the buildpacks to your app
+The order of the buildpacks is important. `apt-buildpack` must come before `google-chrome-buildpack`:
 
-> [!IMPORTANT]
-> If migrating from a previous Chrome-chromedriver installation, then remove any pre-existing Chrome or Chromedriver buildpacks from the app. See the [migration guide](#migrating-from-separate-buildpacks).
+```sh
+project.toml
+. . .
+[build]
+builder = "heroku/buildpacks:20"
 
-```bash
-heroku buildpacks:add -i 1 heroku-community/chrome-for-testing
+[[build.buildpacks]]
+uri = "fagiani/apt"
+
+[[build.buildpacks]]
+uri = "fagianijunior/google-chrome"
+. . .
 ```
-
-Deploy the app to install Chrome for Testing. 🚀 
-
-## Launching `chrome`
-
-To execute in a Heroku dyno, `chrome` typically requires the flags:
-
-* `--headless`
-* `--no-sandbox`
-
-## Selecting the Chrome Release Channel
-
-By default, this buildpack will download the latest `Stable` release, which is provided
-by [Google](https://googlechromelabs.github.io/chrome-for-testing/).
-
-You can control the channel of the release by setting the `GOOGLE_CHROME_CHANNEL`
-config variable to `Stable`, `Beta`, `Dev`, or `Canary`, and then deploy/build the app.
-
-## Migrating from Separate Buildpacks
-
-### Remove Existing Installations
-
-When an app already uses the separate Chrome & Chromedriver buildpacks, remove them from the app, before adding this one:
+### 2. Configure o arquivo Aptfile
+No diretório raiz do seu projeto, crie um arquivo chamado Aptfile com o seguinte conteúdo:
 
 ```
-heroku buildpacks:remove heroku/google-chrome
-heroku buildpacks:remove heroku/chromedriver
-
-heroku buildpacks:add -i 1 heroku-community/chrome-for-testing
+fonts-liberation
+libasound2
+libatk-bridge2.0-0
+libatk1.0-0
+libcups2
+libgbm1
+libxcomposite1
+libxdamage1
+libxfixes3
+libxkbcommon0
+libxrandr2
+chromedriver
 ```
+Esses pacotes são necessários para garantir o funcionamento correto do Google Chrome e do Chromedriver.
 
-### Path to Installed Executables
+### 3. Deploy
+$ pack build myapp 
 
-After being installed by this buildpack, `chrome` & `chromedriver` are set in the `PATH` of dynos.
+O Chrome e o Chromedriver estarão disponíveis no PATH da aplicação.
 
-If the absolute paths are required, you can discover their location in an app:
+Referências
+[apt-buildpack](https://github.com/fagiani/apt-buildpack/)
 
-```bash
->>> heroku run bash
-$ which chrome
-/app/.chrome-for-testing/chrome-linux64/chrome
-$ which chromedriver
-/app/.chrome-for-testing/chromedriver-linux64/chromedriver
-```
-
-These locations may change in future versions of this buildpack, so please allow the operating system to resolve their locations from `PATH`, if possible.
-
-### Changes to Command Flags
-
-The prior `heroku/google-chrome` buildpack wrapped the `chrome` command with default flags using a shim script. This is no longer implemented for `chrome` in this buildpack, to support evolving changes to the Chrome for Testing flags.
-
-Depending on how an app is already setup for testing with Chrome, it may not require any changes.
-
-**If the app fails to start Chrome**, please ensure that the following argument flags are set wherever `chrome` is invoked:
-
-* `--headless`
-* `--no-sandbox`
-
-Some use-cases may require these flags too:
-
-* `--disable-gpu`
-* `--remote-debugging-port=9222`
-
-## Releasing a new version
-
-*For buildpack maintainers only.*
-
-1. [Create a new release](https://github.com/heroku/heroku-buildpack-chrome-for-testing/releases/new) on GitHub.
-1. [Publish the release tag](https://addons-next.heroku.com/buildpacks/eb9c36ef-a265-4ea3-9468-2cd0fc3f04c1/publish) in Heroku Buildpack Registry.
+Licença
+MIT
